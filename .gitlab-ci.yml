@@ -1,0 +1,59 @@
+###
+### This is your one-and-only .gitlab-ci.yaml and defines the GitLab CI/CD pipeline of your repository.
+### You'll find some examples for writing a gitlab-ci.yaml here: CDaaS/_example_gitlab-ci
+###
+
+image: sde-server-docker-prod-local.bahnhub.tech.rz.db.de/buildcontainer/maven:1.0.7
+
+variables:
+  MAVEN_CLI_OPTS: "-s .m2/settings.xml -Dmaven.repo.local=.m2/repository --batch-mode"
+
+stages:
+  - build
+  - test
+  - check_code_quality
+  - check_policies
+  - deploy
+
+cache:
+  paths:
+    - .m2/repository/
+    - target/
+
+build:
+  stage: build
+  script:
+    - mvn $MAVEN_CLI_OPTS compile
+  tags:
+    - dev
+
+test:
+  stage: test
+  script:
+    - mvn $MAVEN_CLI_OPTS test
+  tags:
+    - dev
+    
+sonar:
+  stage: check_code_quality
+  script:
+    - mvn $MAVEN_CLI_OPTS sonar:sonar
+  tags:
+    - dev
+
+whitesource:
+  stage:  check_policies
+  script:
+    - mvn $MAVEN_CLI_OPTS whitesource:update
+  tags:
+    - dev
+
+deploy:
+  stage: deploy
+  script:
+    - mvn $MAVEN_CLI_OPTS deploy
+  except:
+    - master
+  tags:
+    - dev
+

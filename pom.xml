@@ -78,11 +78,11 @@
     			<artifactId>aws-java-sdk-s3</artifactId>
 			<version>${aws-java-sdk.version}</version>
 		</dependency>
-		<dependency>
+		<!--dependency>
 			<groupId>org.springframework.cloud</groupId>
 			<artifactId>spring-cloud-aws-core</artifactId>
 			<version>${spring-cloud.version}</version>
-		</dependency>
+		</dependency-->
 		<dependency>
 			<groupId>de.db.systel.stk</groupId>
 			<artifactId>streckengraph-data</artifactId>
